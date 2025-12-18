@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>To-Do-List</title>
+        <link href="to-do-list.css" rel="stylesheet">
+    </head>
+    <body class="body-class">
+        <div style="display:flex; flex-direction: column;">
+            <div style="height:60px;">
+                <input placeholder="  add" class="input-btn">
+                <button onclick="addlist()" class="submit-btn">Add</button>
+            </div>
+            <div class="lists">
+
+            </div>
+        </div>
+        <script>
+            let todo = [];
+
+            try {
+                const data = localStorage.getItem('todolists');
+                todo = data ? JSON.parse(data) : [];
+            } catch (e) {
+                console.error("Corrupted localStorage, resetting...");
+                localStorage.removeItem('todolists');
+                todo = [];
+            }
+            function looping() {
+
+                let something = '';
+                for (let i = 0; i < todo.length; i++) {
+                    something+=`
+                    <div class="divvalue"><label class="list">${todo[i]}</label>
+                    <button onclick="deletetodo(${i})" class="delete-btn">Delete</button></div>`;
+                    
+                }
+                return something;
+                
+            }
+            console.log(todo);
+            document.querySelector('.lists').innerHTML = looping();
+
+            function addlist() {
+                const inputvalue = document.querySelector('.input-btn').value.trim();
+                todo.push(inputvalue);
+                localStorage.setItem('todolists',JSON.stringify(todo));
+                document.querySelector('.lists').innerHTML = looping();
+                document.querySelector('.input-btn').value = '';
+            }
+            function deletetodo(j) {
+                todo.splice(j,1);
+                localStorage.setItem('todolists',JSON.stringify(todo));
+                document.querySelector('.lists').innerHTML = looping();
+                
+            }
+
+        </script>
+    </body>
+</html>
